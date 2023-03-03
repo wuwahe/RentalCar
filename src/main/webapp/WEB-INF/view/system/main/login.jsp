@@ -4,7 +4,7 @@
 <html class="loginHtml">
 <head>
 	<meta charset="utf-8">
-	<title>登录-汽车出租系统</title>
+	<title>锋迷汽车管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -17,7 +17,7 @@
 </head>
 <body class="loginBody">
 <br><br>
-<h1 align="center"  style="color:LightSteelBlue ; font-size: 50px">拉勾汽车租赁系统</h1>
+<h1 align="center"  style="color:LightSteelBlue ; font-size: 50px">锋迷汽车管理系统</h1>
 	<br><br>
 	<form class="layui-form" id="loginFrm" method="post" action="${pageContext.request.contextPath}/login/login.action">
 		<div class="login_face"><img src="${pageContext.request.contextPath}/resources/images/face.jpg" class="userAvatar"></div>
@@ -47,7 +47,40 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/layui/layui.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/cache.js"></script>
 	<script type="text/javascript">
+		layui.use(['layer','form','jquery'],function (){
+			var form = layui.form,
+				layer = parent.layer === undefined ? layui.layer : top.layer,
+				$ = layui.jquery;
 
+			//登录按钮提交表单
+			form.on("submit(login)",function (data){
+				$(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
+				//设置提交
+				setTimeout(function (){
+					$("#loginFrm").submit();
+				},1000);
+				//阻止默认的提交方式
+				return false;
+			})
+
+			//表单输入效果
+			$(".loginBody .input-item").click(function(e){
+				e.stopPropagation();
+				$(this).addClass("layui-input-focus").find(".layui-input").focus();
+			})
+			$(".loginBody .layui-form-item .layui-input").focus(function(){
+				$(this).parent().addClass("layui-input-focus");
+			})
+			$(".loginBody .layui-form-item .layui-input").blur(function(){
+				$(this).parent().removeClass("layui-input-focus");
+				if($(this).val() != ''){
+					$(this).parent().addClass("layui-input-active");
+				}else{
+					$(this).parent().removeClass("layui-input-active");
+				}
+			})
+
+		})
 
 	</script>
 </body>

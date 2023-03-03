@@ -44,6 +44,58 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/echarts/js/jquery-3.1.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/layui/layui.js"></script>
 <script type="text/javascript">
+    layui.use(['jquery','layer','form','table','laydate'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
+
+        //查询条件的日期组件
+        laydate.render({
+            elem: '#year',
+            type: 'year',
+            vale: new Date()
+        })
+
+        //点击查询
+        $("#doSearch").click(function (){
+            getData();
+        })
+
+        //获取数据并且设置到echarts图标中
+        function getData(){
+            //1.获取参数 年份
+            var year = $("#year").val();
+            if(year == ''){
+                year = new Date().getFullYear();
+            }
+            //2.发送ajax请求获取数据
+            $.get("${pageContext.request.contextPath}/stat/loadCompanyYearGradeStatJson.action",{year:year},function (data){
+                //3.获取echarts对象,并设置属性和数据
+                var dom = document.getElementById("container");
+                var myCharts = echarts.init(dom);
+                var option = {
+                    xAxis: {
+                        type: 'category',
+                        data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: data,
+                            type: 'line'
+                        }
+                    ]
+                }
+                //4.将option设置到echarts对象中
+                myCharts.setOption(option);
+            })
+        }
+
+    })
 
 
 </script>

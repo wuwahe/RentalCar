@@ -172,7 +172,150 @@
 
 <script src="${pageContext.request.contextPath}/resources/layui/layui.js"></script>
 <script type="text/javascript">
+    layui.use(['jquery','layer','form','table','laydate'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
 
+        //查询条件的日期组件
+        laydate.render({
+            elem: '#startTime',
+            type: 'datetime'
+        })
+
+        laydate.render({
+            elem: '#endTime',
+            type: 'datetime'
+        })
+
+        //修改页面的日期组件
+        laydate.render({
+            elem: '#checkdate',
+            type: 'datetime'
+        })
+
+        //初始化数据表格
+        var tableIns;
+        tableIns = table.render({
+            elem: '#checkTable' , //渲染的表格对象
+            url: '${pageContext.request.contextPath}/check/loadAllCheck.action', //请求数据接口的地址
+            title:'检查单数据表',
+            toolbar: '#checkToolBar',
+            height: 'full-260',
+            page: true , //开启分页
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox',fixed:'left'},
+                {field: 'checkid',title:'检查单号',align:'center',width:'260'},
+                {field: 'rentid',title:'出租单号',align:'center',width:'260'},
+                {field: 'problem',title:'存在问题',align:'center',width:'105'},
+                {field: 'checkdesc',title:'问题描述',align:'center',width:'150'},
+                {field: 'paymoney',title:'赔付金额',align:'center',width:'100'},
+                {field: 'opername',title:'操作员',align:'center',width:'100'},
+                {field: 'checkdate',title:'检查时间',align:'center',width:'180'},
+                {field: 'createtime',title:'录入时间',align:'center',width:'180'},
+                {fixed:'right',title:'操作',toolbar:'#checkBar',align:'center',width:'150'}
+            ]],
+            done: function (data,curr,count){
+                //如果不是第一页，返回的值为0，返回到上一页
+                if(data.data.length == 0 && crr != 1){
+                    tableIns.reload({
+                        page: {
+                            curr : curr - 1
+                        }
+                    })
+                }
+            }
+        })
+
+        //模糊查询
+        $("#doSearch").click(function (){
+            //获取表单的数据
+            var params = $("#searchFrm").serialize();
+            tableIns.reload({
+                url: "${pageContext.request.contextPath}/check/loadAllCheck.action?"+params,
+                page: {curr: 1}
+            })
+        })
+
+        //监听行工具栏
+        table.on('tool(checkTable)',function (obj){
+            //获取当前的行数据
+            var data = obj.data;
+            //获取事件
+            var layEvent = obj.event;
+            if(layEvent == 'edit'){
+                openUpdateCheck(data);
+            }else if(layEvent == 'del'){
+                layer.confirm("您是否确认删除"+data.checkid+"这个检查单吗？",function (index){
+                    //发送ajax请求
+                    $.get("${pageContext.request.contextPath}/check/deleteCheck.action",{checkid: data.checkid },function (res){
+                        layer.msg(res.msg);
+                        //刷新数据表格
+                        tableIns.reload();
+                    })
+                })
+            }
+        })
+
+        var mainIndex;
+        var url;
+        //打开检查单修改页面
+        function openUpdateCheck(data){
+            mainIndex =  layer.open({
+                type: 1 ,
+                title: "修改检查单",
+                content: $("#saveOrUpdateDiv"),
+                area: ['750px' , '420px'],
+                success: function (index){
+                    form.val("dataFrm",data);
+                    url = "${pageContext.request.contextPath}/check/updateCheck.action"
+                }
+            })
+        }
+
+        //提交表单
+        form.on("submit(doSubmit)",function (obj){
+            //获取表单的数据
+            var params = $("#dataFrm").serialize();
+            $.post(url,params,function (obj){
+                layer.msg(obj.msg);
+                //关闭弹出层
+                layer.close(mainIndex);
+                //刷新表格数据
+                tableIns.reload();
+            })
+        })
+
+        //监听头部工具栏事件
+        table.on("toolbar(checkTable)",function (obj){
+            var layEvent = obj.event;
+            if(layEvent == 'deleteBatch'){
+                //得到选中的行信息
+                var checkStatus =  table.checkStatus("checkTable");
+                var data = checkStatus.data; //拿到行数据
+                //定义要发送给后台的参数  ids=123123&231231
+                var params = "";
+                $.each(data ,function (i , item){
+                    if(i == 0){
+                        params += "ids="+item.checkid;
+                    }else{
+                        params += "&ids="+item.checkid;
+                    }
+                });
+                layer.confirm("您确认要删除这些检查单信息吗?",function (index){
+                    //发送异步请求删除
+                    $.get("${pageContext.request.contextPath}/check/deleteBatchCheck.action",params,function (res){
+                        layer.msg(res.msg);
+                        //刷新表格
+                        tableIns.reload();
+                    })
+                })
+            }
+        })
+    })
 </script>
 </body>
 </html>

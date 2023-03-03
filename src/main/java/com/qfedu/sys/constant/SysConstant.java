@@ -7,7 +7,7 @@ public interface SysConstant {
 
     //用户登录相关常量
     String USER_LOGIN_ERROR_MSG = "用户名或密码错误";
-    String USER_LOGIN_CODE_ERROR_MSG = "用户名或密码错误";
+    String USER_LOGIN_CODE_ERROR_MSG = "验证码错误";
 
     //可用状态常量
     Integer AVAILABLE_TRUE = 1;

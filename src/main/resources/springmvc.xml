@@ -17,10 +17,22 @@
     <!--配置视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-IF/view/"></property>
+        <property name="prefix" value="/WEB-INF/view/"></property>
         <property name="suffix" value=".jsp"></property>
+        <!--<property name="viewNames">
+            <value>org.springframework.web.servlet.view.InternalResourceView</value>
+        </property>-->
     </bean>
 
     <!--配置静态文件放行-->
     <mvc:default-servlet-handler></mvc:default-servlet-handler>
+
+
+    <!--配置文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--设置文件的编码-->
+        <property name="defaultEncoding" value="utf-8"></property>
+        <!--配置文件上传支持的大小-->
+        <property name="maxUploadSize" value="20971520"></property>
+    </bean>
 </beans>

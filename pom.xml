@@ -237,11 +237,13 @@
         </dependency>
 
         <!--hutool-->
+        <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.6.8</version>
+            <version>5.7.22</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

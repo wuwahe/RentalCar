@@ -44,7 +44,59 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/echarts/js/jquery-3.1.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/layui/layui.js"></script>
 <script type="text/javascript">
+    layui.use(['jquery','layer','form','table','laydate'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var laydate = layui.laydate;
 
+        //查询条件的日期组件
+        laydate.render({
+            elem: '#year',
+            type: 'year',
+            vale: new Date()
+        })
+
+        //点击查询
+        $("#doSearch").click(function () {
+            getData();
+        })
+
+        //获取数据并且设置到echarts图标中
+        function getData() {
+            //1.获取参数 年份
+            var year = $("#year").val();
+            if (year == '') {
+                year = new Date().getFullYear();
+            }
+            //2.发送ajax请求
+            $.get("${pageContext.request.contextPath}/stat/loadOpernameYearGradeStatJson.action",{year: year},function (data){
+                var dom = document.getElementById("container");
+                var myCharts = echarts.init(dom);
+                var option = {
+                    xAxis: {
+                        type: 'category',
+                        data: data.name
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: data.value,
+                            type: 'bar',
+                            showBackground: true,
+                            backgroundStyle: {
+                                color: 'rgba(180, 180, 180, 0.2)'
+                            }
+                        }
+                    ]
+                };
+                myCharts.setOption(option);
+            })
+        }
+    })
 </script>
 </body>
 </html>

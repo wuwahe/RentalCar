@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.sys.mapper.UserMapper">
+
+    <!--定义返回类型resultMap-->
+    <resultMap id="BaseResultMap" type="com.qfedu.sys.domain.User">
+        <id column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="loginname" jdbcType="VARCHAR" property="loginname"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="realname" jdbcType="VARCHAR" property="realname"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="pwd" jdbcType="VARCHAR" property="pwd"/>
+        <result column="position" jdbcType="VARCHAR" property="position"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="available" jdbcType="VARCHAR" property="available"/>
+
+    </resultMap>
+    <!--定义SQL片段-->
+    <sql id="Base_Colum_list">
+    userid,loginname,identity,realname,sex,address,phone,pwd,position,type,available
+    </sql>
+    <!--用户登录查询-->
+    <select id="login" resultMap="BaseResultMap">
+        select <include refid="Base_Colum_list"/> from sys_user
+        where loginname = #{loginname} and pwd = #{pwd}
+
+    </select>
+</mapper>
