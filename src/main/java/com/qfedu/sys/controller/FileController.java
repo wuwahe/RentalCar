@@ -16,11 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Author:千锋强哥
- * @organization: 千锋教研院
- * @Version: 1.0
- */
+
 @Controller
 @RequestMapping("file")
 public class FileController {

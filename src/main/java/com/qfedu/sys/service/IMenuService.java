@@ -6,11 +6,7 @@ import com.qfedu.sys.utils.DataGridView;
 
 import java.util.List;
 
-/**
- * @Author:千锋强哥
- * @organization: 千锋教研院
- * @Version: 1.0
- */
+
 public interface IMenuService {
     List<Menu> queryAllMenuForList(MenuVo menuVo);
 

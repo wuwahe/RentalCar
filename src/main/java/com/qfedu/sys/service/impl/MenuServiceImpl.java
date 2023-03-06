@@ -12,11 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @Author:千锋强哥
- * @organization: 千锋教研院
- * @Version: 1.0
- */
+
 @Service
 public class MenuServiceImpl implements IMenuService {
 

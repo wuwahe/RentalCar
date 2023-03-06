@@ -68,5 +68,10 @@ public class RentServiceImpl implements IRentService {
         return rentMapper.queryRentById(rentid);
     }
 
+    @Override
+    public Rent queryRentByRentId(String rentid) {
+        return   rentMapper.queryRentById(rentid);
+    }
+
 
 }

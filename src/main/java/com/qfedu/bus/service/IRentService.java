@@ -14,4 +14,6 @@ public interface IRentService {
     void deleteRent(RentVo rentVo);
 
     Rent queryRentById(String rentid);
+
+    Rent queryRentByRentId(String rentid);
 }
